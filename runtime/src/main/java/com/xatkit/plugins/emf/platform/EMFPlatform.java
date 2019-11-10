@@ -23,17 +23,43 @@ import static fr.inria.atlanmod.commons.Preconditions.checkArgument;
 import static fr.inria.atlanmod.commons.Preconditions.checkNotNull;
 import static java.util.Objects.nonNull;
 
+/**
+ * A {@link RuntimePlatform} class that loads and manipulates EMF (meta) models.
+ * <p>
+ * This platform is initialized with a metamodel, and provides utility methods to load instances of this metamodel as
+ * EMF {@link Resource}s.
+ */
 public class EMFPlatform extends RuntimePlatform {
 
+    /**
+     * The {@link ResourceSet} used to load the metamodel as well as its concrete instances.
+     * <p>
+     * The {@link ResourceSet} is configured to laod {@code .ecore} and {@code .xmi} files.
+     */
     private ResourceSet rSet;
 
+    /**
+     * The EMF {@link Resource} containing the metamodel associated to the {@link EMFPlatform}.
+     */
     private Resource metamodelResource;
 
+    /**
+     * Constructs an {@link EMFPlatform} with the provided {@code xatkitCore} and {@code configuration}.
+     * <p>
+     * The provided {@code configuration} must contain a valid metamodel file location associated to the
+     * {@link EMFUtils#METAMODEL_LOCATION_KEY} key.
+     *
+     * @param xatkitCore    the {@link XatkitCore} instance associated to the platform
+     * @param configuration the {@link Configuration} used to initialize the platform
+     * @throws IllegalArgumentException if the provided {@code configuration} does not contain a valid metamodel file
+     *                                  location, or if the provided file does not exist.
+     * @see EMFUtils#METAMODEL_LOCATION_KEY
+     */
     public EMFPlatform(XatkitCore xatkitCore, Configuration configuration) {
         super(xatkitCore, configuration);
         String metamodelLocation = configuration.getString(EMFUtils.METAMODEL_LOCATION_KEY);
         checkArgument(nonNull(metamodelLocation) && !metamodelLocation.isEmpty(), "Cannot construct the %s: cannot " +
-                "find a valid metamodel location in the provided configuration (configuration key: %s)",
+                        "find a valid metamodel location in the provided configuration (configuration key: %s)",
                 this.getClass().getSimpleName(), EMFUtils.METAMODEL_LOCATION_KEY);
         File metamodelFile = FileUtils.getFile(metamodelLocation, configuration);
         checkArgument(metamodelFile.exists(), "Cannot construct the %s: the provided metamodel file does not exist " +
@@ -42,10 +68,22 @@ public class EMFPlatform extends RuntimePlatform {
         this.metamodelResource = loadMetamodelResource(metamodelFile);
     }
 
+    /**
+     * Returns the EMF {@link Resource} containing the metamodel associated to the platform.
+     *
+     * @return the EMF {@link Resource} containing the metamodel associated to the platform
+     */
     public Resource getMetamodelResource() {
         return this.metamodelResource;
     }
 
+    /**
+     * Initializes the underlying {@link ResourceSet} and registers its {@link Resource} factories.
+     * <p>
+     * The created {@link ResourceSet} handles {@code .ecore} and {@code .xmi} files.
+     *
+     * @return the initialized {@link ResourceSet}
+     */
     private ResourceSet initializeResourceSet() {
         ResourceSet rSet = new ResourceSetImpl();
         rSet.getPackageRegistry().put(EcorePackage.eINSTANCE.getNsURI(), EcorePackage.eINSTANCE);
@@ -54,6 +92,14 @@ public class EMFPlatform extends RuntimePlatform {
         return rSet;
     }
 
+    /**
+     * Loads the metamodel {@link Resource} associated to the provided {@code metamodelFile}.
+     *
+     * @param metamodelFile the {@link File} containing the metamodel to load
+     * @return the EMF {@link Resource} containing the loaded metamodel
+     * @throws NullPointerException     if the provided {@code metamodelFile} is {@code null}
+     * @throws IllegalArgumentException if the provided {@code metamodelFile} does not exist
+     */
     private Resource loadMetamodelResource(File metamodelFile) {
         checkNotNull(metamodelFile, "Cannot load the metamodel from the provided file: %s", metamodelFile);
         checkArgument(metamodelFile.exists(), "Cannot load the metamodel from the provided file: %s, the file does " +
@@ -63,13 +109,23 @@ public class EMFPlatform extends RuntimePlatform {
         return rSet.getResource(metamodelURI, true);
     }
 
+    /**
+     * Loads the {@link Resource} associated to the provided {@code modelPath}.
+     * <p>
+     * The provided path should point to a file containing an instance of the metamodel associated to this platform.
+     *
+     * @param modelPath the path of the model to load
+     * @return the EMF {@link Resource} containing the loaded model
+     * @throws NullPointerException if the provided {@code modelPath} is {@code null}
+     * @throws XatkitException      if the provided {@code modelPath} does not correspond to a valid file location
+     */
     public Resource getModelResource(String modelPath) {
         checkNotNull(modelPath, "Cannot load the model from the provided path: %s", modelPath);
         File modelFile = FileUtils.getFile(modelPath, configuration);
-        if(!modelFile.exists()) {
+        if (!modelFile.exists()) {
             Log.warn("Cannot locate the file {0}, trying to resolve it in the classpath", modelPath);
             URL modelURL = this.getClass().getClassLoader().getResource(modelPath);
-            if(nonNull(modelURL)) {
+            if (nonNull(modelURL)) {
                 try {
                     modelFile = new File(modelURL.toURI());
                 } catch (URISyntaxException e) {
