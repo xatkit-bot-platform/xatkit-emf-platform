@@ -4,7 +4,7 @@ path "com.xatkit.plugins.emf.platform.EMFPlatform"
 
 actions {
 	
-	LoadModel(modelPath : String)
-	AllInstances(clazzName : String) : java.util.List<org.eclipse.emf.ecore.EObject>
+	LoadModel(modelPath : String) : org.eclipse.emf.ecore.resource.Resource
+	GetAllInstances(clazzName : String) : java.util.List<org.eclipse.emf.ecore.EObject>
 	
 }
