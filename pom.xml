@@ -19,7 +19,7 @@
     </properties>
 
     <modules>
-        <!-- <module>runtime</module> -->
+        <module>runtime</module>
         <module>platform</module>
     </modules>
 
