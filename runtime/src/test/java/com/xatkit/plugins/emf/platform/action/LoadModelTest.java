@@ -1,5 +1,6 @@
 package com.xatkit.plugins.emf.platform.action;
 
+import com.xatkit.core.XatkitException;
 import com.xatkit.core.session.XatkitSession;
 import com.xatkit.plugins.emf.EMFUtils;
 import com.xatkit.plugins.emf.platform.EMFPlatformTest;
@@ -52,5 +53,11 @@ public class LoadModelTest extends AbstractEMFActionTest {
         Resource modelResource = (Resource) session.get(EMFUtils.MODEL_SESSION_KEY);
         assertThat(modelResource.getContents()).as("Loaded model content is not empty").isNotEmpty();
         assertThat(modelResource).as("Model in the session is the same as the returned one").isEqualTo(result);
+    }
+
+    @Test(expected = XatkitException.class)
+    public void computeInvalidModelPath() {
+        action = new LoadModel(emfPlatform, createValidXatkitSession(), "INVALID");
+        action.compute();
     }
 }
