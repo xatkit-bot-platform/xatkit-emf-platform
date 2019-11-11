@@ -1,0 +1,27 @@
+import library "EMFQueryBot/src/EMFQueryBot.intent" as EMFQueryBotLibrary
+import library "CoreLibrary"
+import platform "EMFPlatform"
+import platform "ReactPlatform"
+
+use provider ReactPlatform.ReactIntentProvider
+
+on intent LoadModel do
+	ReactPlatform.Reply("Alright, give me a second!")
+	val resource = EMFPlatform.LoadModel(context.get("Model").get("modelLocation") as String)
+	ReactPlatform.Reply("Resource with URI " + resource.URI + " loaded")
+	
+on intent GetAllInstances do
+	val eClassName = context.get("Query").get("allInstancesSelector") as String
+	val instances = EMFPlatform.GetAllInstances(eClassName)
+	ReactPlatform.Reply("Found " + instances.size + " instances of " + eClassName)
+
+// Imported from CoreLibrary
+on intent Help do
+	ReactPlatform.Reply("Hi! I can help you navigate your EMF models! 
+		You can start by asking me to load a model with the following syntax: 
+		\"Load the model from <location>\"")
+		
+// Imported from CoreLibrary
+on intent Default_Fallback_Intent do
+	ReactPlatform.Reply("Sorry I didn't get it :(")
+	

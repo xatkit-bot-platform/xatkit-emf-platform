@@ -1,0 +1,35 @@
+Library EMFQueryBot
+
+mapping Class {
+	// Not really sure how far we should drive DialogFlow here
+	value Project 			synonyms: Projects project projects
+	value TaskUnit 			synonyms: TaskUnits taskunit taskunits "task unit" "task units"
+	value Milestone 		synonyms: Milestones milestone milestones
+	value Task 				synonyms: Tasks task tasks
+	value CompositeTask 	synonyms: "Composite Task" "composite task" "compositetask"
+	value Resource 			synonyms: Resources resource resources
+	value Human				synonyms: Humans human humans
+	value Technical 		synonyms: Technicals technical technicals
+}
+
+intent LoadModel {
+	inputs {
+		"Load the model at this location: LOCATION"
+		"Load from LOCATION"
+		"Load the model from LOCATION"
+		"Load LOCATION"
+	}
+	creates context Model {
+		sets parameter modelLocation from fragment "LOCATION" (entity any)
+	}
+}
+
+intent GetAllInstances {
+	inputs {
+		"Give me all the projects"
+		"Give me all the instances of projects"
+	}
+	creates context Query {
+		sets parameter allInstancesSelector from fragment "projects" (entity Class)
+	}
+}
