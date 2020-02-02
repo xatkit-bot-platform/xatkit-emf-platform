@@ -3,7 +3,7 @@ package com.xatkit.plugins.emf;
 /**
  * An utility interface that holds {@link com.xatkit.plugins.emf.platform.EMFPlatform}-related constants.
  */
-public interface EMFUtils {
+public interface EMFPlatformUtils {
 
     /**
      * The Xatkit {@link org.apache.commons.configuration2.Configuration} key used to set the location of the

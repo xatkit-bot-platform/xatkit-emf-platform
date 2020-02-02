@@ -3,7 +3,7 @@ package com.xatkit.plugins.emf.platform;
 import com.xatkit.AbstractXatkitTest;
 import com.xatkit.core.XatkitCore;
 import com.xatkit.core.XatkitException;
-import com.xatkit.plugins.emf.EMFUtils;
+import com.xatkit.plugins.emf.EMFPlatformUtils;
 import com.xatkit.stubs.StubXatkitCore;
 import org.apache.commons.configuration2.BaseConfiguration;
 import org.apache.commons.configuration2.Configuration;
@@ -65,7 +65,7 @@ public class EMFPlatformTest extends AbstractXatkitTest {
     @Test(expected = IllegalArgumentException.class)
     public void constructMetamodelFileDoesNotExist() {
         Configuration configuration = new BaseConfiguration();
-        configuration.addProperty(EMFUtils.METAMODEL_LOCATION_KEY, "invalid");
+        configuration.addProperty(EMFPlatformUtils.METAMODEL_LOCATION_KEY, "invalid");
         this.emfPlatform = new EMFPlatform(xatkitCore, configuration);
     }
 
@@ -73,7 +73,7 @@ public class EMFPlatformTest extends AbstractXatkitTest {
     public void constructExistingMetamodelFile() {
         String metamodelPath = getMetamodelPath();
         Configuration configuration = new BaseConfiguration();
-        configuration.addProperty(EMFUtils.METAMODEL_LOCATION_KEY, metamodelPath);
+        configuration.addProperty(EMFPlatformUtils.METAMODEL_LOCATION_KEY, metamodelPath);
         this.emfPlatform = new EMFPlatform(xatkitCore, configuration);
         Resource metamodelResource = this.emfPlatform.getMetamodelResource();
         assertThat(metamodelResource.getContents()).as("Metamodel resource content is not empty").isNotEmpty();
@@ -113,7 +113,7 @@ public class EMFPlatformTest extends AbstractXatkitTest {
 
     public static Configuration buildConfiguration() {
         Configuration configuration = new BaseConfiguration();
-        configuration.addProperty(EMFUtils.METAMODEL_LOCATION_KEY, getMetamodelPath());
+        configuration.addProperty(EMFPlatformUtils.METAMODEL_LOCATION_KEY, getMetamodelPath());
         return configuration;
     }
 

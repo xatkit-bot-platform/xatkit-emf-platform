@@ -3,7 +3,7 @@ package com.xatkit.plugins.emf.platform;
 import com.xatkit.core.XatkitCore;
 import com.xatkit.core.XatkitException;
 import com.xatkit.core.platform.RuntimePlatform;
-import com.xatkit.plugins.emf.EMFUtils;
+import com.xatkit.plugins.emf.EMFPlatformUtils;
 import com.xatkit.util.FileUtils;
 import fr.inria.atlanmod.commons.log.Log;
 import org.apache.commons.configuration2.Configuration;

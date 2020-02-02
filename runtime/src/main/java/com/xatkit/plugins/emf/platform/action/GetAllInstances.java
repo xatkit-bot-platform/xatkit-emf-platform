@@ -3,7 +3,7 @@ package com.xatkit.plugins.emf.platform.action;
 import com.xatkit.core.XatkitException;
 import com.xatkit.core.platform.action.RuntimeAction;
 import com.xatkit.core.session.XatkitSession;
-import com.xatkit.plugins.emf.EMFUtils;
+import com.xatkit.plugins.emf.EMFPlatformUtils;
 import com.xatkit.plugins.emf.platform.EMFPlatform;
 import com.xatkit.plugins.emf.util.EMFResourceUtils;
 import fr.inria.atlanmod.commons.log.Log;
@@ -24,7 +24,7 @@ import static java.util.Objects.nonNull;
  * {@link Resource}.
  * <p>
  * This action manipulates the {@link Resource} stored in the {@link XatkitSession} using the
- * {@link EMFUtils#MODEL_SESSION_KEY} key, and will throw an exception if no model has been loaded. See
+ * {@link EMFPlatformUtils#MODEL_SESSION_KEY} key, and will throw an exception if no model has been loaded. See
  * {@link LoadModel} action to load a model with a given path.
  *
  * @see LoadModel
@@ -62,7 +62,7 @@ public class GetAllInstances extends RuntimeAction<EMFPlatform> {
     /**
      * Returns all the instances of the provided {@code clazzName} in the session {@link Resource} model.
      * <p>
-     * This method accesses the {@link Resource} stored in the session with the {@link EMFUtils#MODEL_SESSION_KEY}
+     * This method accesses the {@link Resource} stored in the session with the {@link EMFPlatformUtils#MODEL_SESSION_KEY}
      * key. If there is no {@link Resource} in the session a {@link NullPointerException} is thrown. See
      * {@link LoadModel} to load a model from a given path.
      * <p>
@@ -80,9 +80,9 @@ public class GetAllInstances extends RuntimeAction<EMFPlatform> {
      */
     @Override
     protected Object compute() {
-        Resource modelResource = (Resource) this.session.get(EMFUtils.MODEL_SESSION_KEY);
+        Resource modelResource = (Resource) this.session.get(EMFPlatformUtils.MODEL_SESSION_KEY);
         checkNotNull(modelResource, "Cannot compute %s, cannot find the model from the %s (session key=%s)",
-                this.getClass().getSimpleName(), XatkitSession.class.getSimpleName(), EMFUtils.MODEL_SESSION_KEY);
+                this.getClass().getSimpleName(), XatkitSession.class.getSimpleName(), EMFPlatformUtils.MODEL_SESSION_KEY);
         Resource metamodelResource = this.runtimePlatform.getMetamodelResource();
         EClass eClass = EMFResourceUtils.getEClassWithName(metamodelResource, clazzName);
         if (isNull(eClass)) {
