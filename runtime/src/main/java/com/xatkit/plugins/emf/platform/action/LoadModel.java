@@ -5,6 +5,8 @@ import com.xatkit.core.platform.action.RuntimeAction;
 import com.xatkit.core.session.XatkitSession;
 import com.xatkit.plugins.emf.EMFPlatformUtils;
 import com.xatkit.plugins.emf.platform.EMFPlatform;
+import com.xatkit.plugins.emf.util.EMFResourceUtils;
+import fr.inria.atlanmod.commons.log.Log;
 import org.eclipse.emf.ecore.resource.Resource;
 
 import java.text.MessageFormat;
@@ -58,6 +60,7 @@ public class LoadModel extends RuntimeAction<EMFPlatform> {
         Resource resource = this.runtimePlatform.getModelResource(modelPath);
         if (nonNull(resource)) {
             this.session.store(EMFPlatformUtils.MODEL_SESSION_KEY, resource);
+            Log.info("Resource {0} loaded ({1} elements)", this.modelPath, EMFResourceUtils.getSize(resource));
         } else {
             throw new XatkitException(MessageFormat.format("Cannot load the model at the given path: {0}", modelPath));
         }

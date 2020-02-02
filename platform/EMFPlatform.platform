@@ -6,5 +6,5 @@ actions {
 	
 	LoadModel(modelPath : String) : org.eclipse.emf.ecore.resource.Resource
 	GetAllInstances(clazzName : String) : java.util.List<org.eclipse.emf.ecore.EObject>
-	
+	GetAllInstancesSelect(clazzName : String, query : java.util.Map<String, Object>) : java.util.List<org.eclipse.emf.ecore.EObject>
 }

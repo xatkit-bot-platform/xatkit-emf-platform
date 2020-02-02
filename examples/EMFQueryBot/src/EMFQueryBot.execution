@@ -10,17 +10,19 @@ on intent LoadModel do
 	val resource = EMFPlatform.LoadModel(context.get("Model").get("modelLocation") as String)
 	ReactPlatform.Reply("Resource with URI " + resource.URI + " loaded")
 	
+	
 on intent GetAllInstances do
-	val eClassName = context.get("Query").get("allInstancesSelector") as String
+	ReactPlatform.Reply("Getting all the instances of " + context.get("collection").get("class"))
+	val eClassName = context.get("collection").get("class") as String
 	val instances = EMFPlatform.GetAllInstances(eClassName)
 	ReactPlatform.Reply("Found " + instances.size + " instances of " + eClassName)
 
-// Imported from CoreLibrary
-on intent Help do
-	ReactPlatform.Reply("Hi! I can help you navigate your EMF models! 
-		You can start by asking me to load a model with the following syntax: 
-		\"Load the model from <location>\"")
-		
+on intent GetAllInstancesSelect do
+	val java.util.Map<String, Object> collectionContext = context.get("collection")
+	val instances = EMFPlatform.GetAllInstancesSelect(collectionContext.get("class") as String, collectionContext)
+	ReactPlatform.Reply("Found " + instances.size + "instances")
+
+
 // Imported from CoreLibrary
 on intent Default_Fallback_Intent do
 	ReactPlatform.Reply("Sorry I didn't get it :(")

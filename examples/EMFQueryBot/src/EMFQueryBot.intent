@@ -1,35 +1,217 @@
-Library EMFQueryBot
+Library BotUAM
+
+// Entity examples
 
 mapping Class {
-	// Not really sure how far we should drive DialogFlow here
-	value Project 			synonyms: Projects project projects
-	value TaskUnit 			synonyms: TaskUnits taskunit taskunits "task unit" "task units"
-	value Milestone 		synonyms: Milestones milestone milestones
-	value Task 				synonyms: Tasks task tasks
-	value CompositeTask 	synonyms: "Composite Task" "composite task" "compositetask"
-	value Resource 			synonyms: Resources resource resources
-	value Human				synonyms: Humans human humans
-	value Technical 		synonyms: Technicals technical technicals
+value City synonyms: "city" "metropolis" "urban center" 
+value District synonyms: "district" "territory" "territorial dominion" "dominion" 
+value Street synonyms: "street" 
+value Transitable
+value TrafficIntensity
+value Incident synonyms: "incident" 
+value Section synonyms: "section" "subdivision" "segment" "part" "division" "plane section" "department" "incision" "surgical incision" 
+value TimeInterval
+value RoadWork
+value Closed
+value Accident synonyms: "accident" "fortuity" "chance event" 
+value Bottleneck synonyms: "constriction" "bottleneck" "chokepoint" 
+
 }
 
-intent LoadModel {
-	inputs {
-		"Load the model at this location: LOCATION"
-		"Load from LOCATION"
-		"Load the model from LOCATION"
-		"Load LOCATION"
-	}
-	creates context Model {
-		sets parameter modelLocation from fragment "LOCATION" (entity any)
-	}
+
+mapping StringAttribute {
+value name synonyms: "name" "call" "identify" "nominate" "make" "appoint" "constitute" "discover" "key" "key out" "distinguish" "describe" "mention" "advert" "bring up" "cite" "refer" "list" "diagnose" "figure" "public figure" "gens" "epithet" 
+value serviceLevel
+value description synonyms: "description" "verbal description" 
+
 }
 
-intent GetAllInstances {
-	inputs {
-		"Give me all the projects"
-		"Give me all the instances of projects"
-	}
-	creates context Query {
-		sets parameter allInstancesSelector from fragment "projects" (entity Class)
-	}
+mapping NumericalAttribute {
+value intensity synonyms: "intensity" "strength" "intensity level" "intensiveness" "volume" "loudness" "saturation" "chroma" "vividness" 
+value "value" synonyms: "value" "prize" "treasure" "appreciate" "respect" "esteem" "prise" "measure" "evaluate" "valuate" "assess" "appraise" "rate" "economic value" "time value" "note value" 
+value injuries synonyms: "injury" "hurt" "harm" "trauma" "accidental injury" "wound" "combat injury" 
+
 }
+
+mapping BooleanAttribute {
+value hasCyclistPath
+
+}
+
+mapping DateAttribute {
+value init
+value end synonyms: "end" "stop" "finish" "terminate" "cease" "ending" "last" "final stage" "goal" "destruction" "death" "conclusion" "close" "closing" "remainder" "remnant" "oddment" 
+
+}
+
+mapping StringReference {
+value districts synonyms: "district" "territory" "territorial dominion" "dominion" 
+value streets synonyms: "street" 
+value incidents synonyms: "incident" 
+value sections synonyms: "section" "subdivision" "segment" "part" "division" "plane section" "department" "incision" "surgical incision" 
+value causes synonyms: "cause" "reason" "grounds" "campaign" "crusade" "drive" "movement " "effort" "causal agent" "causal agency" "lawsuit" "suit" "case" "causa" 
+
+}
+
+mapping StringReferenceVerb {
+value districts synonyms: "zone" "district" 
+value streets
+value incidents
+value sections synonyms: "segment" "section" 
+value causes synonyms: "cause" "do" "make" "induce" "stimulate" "have" "get" 
+
+}
+
+//mapping NumericalReference {
+//
+//}
+
+mapping NumericalReferenceVerb {
+value intensity
+
+}
+
+//mapping BooleanReference {
+//
+//}
+
+//mapping BooleanReferenceVerb {
+//
+//}
+
+mapping DateReference {
+value estimated
+value real synonyms: "real number" "real" 
+
+}
+
+mapping DateReferenceVerb {
+value estimated synonyms: "estimate" "gauge" "approximate" "guess" "judge" "calculate" "reckon" "count on" "figure" "forecast" 
+value real
+
+}
+
+composite Attribute {
+	value StringAttribute
+	value NumericalAttribute
+	value DateAttribute
+	value BooleanAttribute
+}
+
+composite Reference {
+	value StringReference
+//	value NumericalReference
+	value DateReference
+//	value BooleanReference
+}
+
+mapping StringComparator{
+	value "starts with" synonyms: "starts with" "starting with"  
+	value "ends with" 	synonyms: "ends with" "ending with"
+	value "contains"	synonyms: "contains" "containing"
+	value "equals"		synonyms: "equals" "like" "is" "equals to" "same as"
+}
+mapping NumericalComparator{
+	value "greater than"  	synonyms: "bigger than" 
+	value "lower than" 		synonyms: "smaller than" 
+	value "equals" 			synonyms: "equals" "like" "is" "equals to" "same as"
+	value "contains"	synonyms: "contains" "containing"
+}
+
+mapping DateComparator{
+	value "greater than"  	synonyms: "bigger than" 
+	value "lower than" 		synonyms: "smaller than" 
+	value "equals" 			synonyms: "equals" "like" "is" "equals to" "same as"
+	value "contains"	synonyms: "contains" "containing"
+}
+
+mapping BooleanOperator{
+
+	value and 		synonyms: "AND"
+	value or 		synonyms: "OR"
+}
+
+mapping BooleanValue{
+
+	value "true" 		synonyms: "is"
+	value "false" 	synonyms: "is not" "isn't"
+}
+
+mapping EmptyValue{
+	value unset		synonyms: "empty" "not defined" "not set"
+	value set		synonyms: "not empty" "defined"  
+}
+
+composite condition {
+	 value Attribute "is " EmptyValue
+	 value Reference "is " EmptyValue
+	 value StringAttribute StringComparator // any (text does not exist in DF)
+	 value NumericalAttribute NumericalComparator number
+	 value BooleanValue BooleanAttribute 
+//	 value DateAttribtue DateComparator date
+	 value StringReference StringComparator // any (text does not exist in DF)
+//	 value NumericalReference NumericalComparator number
+	 value DateReference DateComparator date
+//	 value BooleanValue BooleanReference
+	 value StringReferenceVerb // any (text does not exist in DF)
+	 value NumericalReferenceVerb number
+	 value DateReferenceVerb date
+}
+
+
+/*
+ * EDITED FROM HERE
+ */
+ 
+ composite ResultClause {
+ 	value "sorted by" Attribute
+ 	// asList, asSet, etc
+ }
+ 
+ intent LoadModel {
+ 	inputs {
+ 		"Load model LOCATION"
+ 	}
+ 	creates context Model {
+ 		sets parameter modelLocation from fragment "LOCATION" (entity any)
+ 	}
+ }
+ 
+ intent GetAllInstances {
+ 	inputs {
+ 		"Give me all the CLASS"
+ 	}
+ 	creates context collection {
+ 		sets parameter class from fragment "CLASS" (entity Class)
+ 	}
+ }
+ 
+ // Note: cannot reuse the same fragment for 2 different entities
+ intent GetAllInstancesSelect {
+ 	inputs {
+ 		"Give me all city with name starts with \"test\""
+ 		"Give me all city with intensity greater than 0"
+ 		"Give me all city with name starts with \"test\" and name ends with \"pouet\""
+ 		"Give me all city with name starts with \"test\" and intensity lower than 10"
+ 		"Give me all city with intensity greater than 0 and intensity lower than 10"
+ 		"Give me all city with intensity greater than 0 and name ends with \"pouet\""
+ 		
+ 		"Give me all city with name starts with \"test\" sorted by name"
+ 		"Give me all city with intensity greater than 0 sorted by name"
+ 		"Give me all city with name starts with \"test\" and name ends with \"pouet\" sorted by name"
+ 		"Give me all city with name starts with \"test\" and intensity lower than 10 sorted by name"
+ 		"Give me all city with intensity greater than 0 and intensity lower than 10 sorted by name"
+ 		"Give me all city with intensity greater than 0 and name ends with \"pouet\" sorted by name"
+ 	}
+ 	creates context collection {
+ 		sets parameter class from fragment "city" (entity Class)
+ 		sets parameter condition1 from fragment "name starts with" (entity condition)
+ 		sets parameter stringValue1 from fragment "test" (entity any)
+ 		sets parameter condition1 from fragment "intensity greater than 0" (entity condition)
+ 		sets parameter condition2 from fragment "name ends with" (entity condition)
+ 		sets parameter stringValue2 from fragment "pouet" (entity any)
+ 		sets parameter condition2 from fragment "intensity lower than 10" (entity condition)
+ 		sets parameter conditionComposition from fragment "and" (entity BooleanOperator)
+ 		sets parameter resultClause from fragment "sorted by name" (entity ResultClause)
+ 	}
+ }

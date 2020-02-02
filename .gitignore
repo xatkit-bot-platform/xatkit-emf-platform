@@ -49,3 +49,4 @@ target
 bin
 
 platform/*.xmi
+key.json

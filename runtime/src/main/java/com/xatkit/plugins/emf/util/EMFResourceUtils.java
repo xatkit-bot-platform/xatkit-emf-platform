@@ -1,5 +1,6 @@
 package com.xatkit.plugins.emf.util;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -39,6 +40,13 @@ public class EMFResourceUtils {
         return (EClass) result.orElse(null);
     }
 
+    public static EAttribute getEAttribute(Resource metamodelResource, String eClassName, String eAttributeName) {
+        EClass eClass = getEClassWithName(metamodelResource, eClassName);
+        Optional<EAttribute> result =
+                eClass.getEAllAttributes().stream().filter(element -> element.getName().equals(eAttributeName)).findAny();
+        return (EAttribute) result.orElse(null);
+    }
+
     /**
      * Retrieves all the instances of the provided {@code eClass} in the given {@code modelResource}.
      * <p>
@@ -52,5 +60,10 @@ public class EMFResourceUtils {
     public static List<EObject> getAllInstancesOfType(Resource modelResource, EClass eClass) {
         Iterable<EObject> iterableContent = modelResource::getAllContents;
         return StreamSupport.stream(iterableContent.spliterator(), false).filter(eClass::isInstance).collect(Collectors.toList());
+    }
+
+    public static long getSize(Resource modelResource) {
+        Iterable<EObject> iterableContent = modelResource::getAllContents;
+        return StreamSupport.stream(iterableContent.spliterator(), false).count();
     }
 }

@@ -34,7 +34,7 @@ public class GetAllInstances extends RuntimeAction<EMFPlatform> {
     /**
      * The name of the {@link EClass} to retrieve the instances of.
      */
-    private String clazzName;
+    protected String clazzName;
 
     /**
      * Constructs a new {@link GetAllInstances} action from the provided {@code emfPlatform}, {@code session}, and
