@@ -115,7 +115,7 @@ mapping NumericalComparator{
 	value "greater than"  	synonyms: "bigger than" 
 	value "lower than" 		synonyms: "smaller than" 
 	value "equals" 			synonyms: "equals" "like" "is" "equals to" "same as"
-	value "contains"	synonyms: "contains" "containing"
+//	value "contains"	synonyms: "contains" "containing"
 }
 
 mapping DateComparator{
