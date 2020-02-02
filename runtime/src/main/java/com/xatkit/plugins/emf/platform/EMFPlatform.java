@@ -47,20 +47,20 @@ public class EMFPlatform extends RuntimePlatform {
      * Constructs an {@link EMFPlatform} with the provided {@code xatkitCore} and {@code configuration}.
      * <p>
      * The provided {@code configuration} must contain a valid metamodel file location associated to the
-     * {@link EMFUtils#METAMODEL_LOCATION_KEY} key.
+     * {@link EMFPlatformUtils#METAMODEL_LOCATION_KEY} key.
      *
      * @param xatkitCore    the {@link XatkitCore} instance associated to the platform
      * @param configuration the {@link Configuration} used to initialize the platform
      * @throws IllegalArgumentException if the provided {@code configuration} does not contain a valid metamodel file
      *                                  location, or if the provided file does not exist.
-     * @see EMFUtils#METAMODEL_LOCATION_KEY
+     * @see EMFPlatformUtils#METAMODEL_LOCATION_KEY
      */
     public EMFPlatform(XatkitCore xatkitCore, Configuration configuration) {
         super(xatkitCore, configuration);
-        String metamodelLocation = configuration.getString(EMFUtils.METAMODEL_LOCATION_KEY);
+        String metamodelLocation = configuration.getString(EMFPlatformUtils.METAMODEL_LOCATION_KEY);
         checkArgument(nonNull(metamodelLocation) && !metamodelLocation.isEmpty(), "Cannot construct the %s: cannot " +
                         "find a valid metamodel location in the provided configuration (configuration key: %s)",
-                this.getClass().getSimpleName(), EMFUtils.METAMODEL_LOCATION_KEY);
+                this.getClass().getSimpleName(), EMFPlatformUtils.METAMODEL_LOCATION_KEY);
         File metamodelFile = FileUtils.getFile(metamodelLocation, configuration);
         checkArgument(metamodelFile.exists(), "Cannot construct the %s: the provided metamodel file does not exist " +
                 "(path=%s)", this.getClass().getSimpleName(), metamodelFile.getAbsolutePath());
